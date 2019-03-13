@@ -44,11 +44,23 @@ var database = firebase.database();
 
 // user authenetication...
 
-var currentUser = '-L_oPiwhwbFU95fGA2hC'
+var currentUser = 'jstevens'
+
+function getEvent(id) {
+  console.log(id);
+  database.ref('/events/' + id).on('child_added', function(snapshot) {
+    console.log(snapshot.val().eventDate)
+  })
+}
 
 
-database.ref('/users').on("child_added", function(childSnapshot) {
+database.ref('users').on("child_added", function(childSnapshot) {
   var myEvents = childSnapshot.val().userEvents;
+  //console.log(childSnapshot.val().userName)
+
+  // myEvents.forEach(function(event) {
+  //   getEvent(event)    
+  // })
 
 
   // console.log(childSnapshot.val().userEvents)
@@ -60,16 +72,44 @@ database.ref('/users').on("child_added", function(childSnapshot) {
 
 // database.ref('/users').on("child_changed", function(childSnapshot) {
 //   //console.log(childSnapshot.key)
-  
-// })
-
-database.ref('/events').on("child_added", function(childSnapshot) {
-  //console.log(childSnapshot.key)
-  
-})
-
-
+ 
 // 
+
+function renderEventsListItem(item) {
+  var listItem = $('<li>').addClass('eventsListItem');
+  listItem.text(item.eventOwner);
+  $('#user-events').append(listItem);
+}
+
+database.ref('events').on('child_added', function(childSnapshot) {
+  var members = childSnapshot.val().eventMembers;
+  if (members !== undefined) {
+    if (Object.keys(members).includes(currentUser)) {
+      renderEventsListItem(childSnapshot.val())
+    }
+  }
+});
+
+database.ref('events').on('child_changed', function(childSnapshot) {
+  var members = childSnapshot.val().eventMembers;
+  if (members !== undefined) {
+    if (Object.keys(members).includes(currentUser)) {
+      renderEventsListItem(childSnapshot.val())
+    }
+  }
+});
+
+
+
+
+
+// database.ref('/events').orderByChild('eventMembers').on("value", function(snapshot) {
+  
+//   snapshot.forEach(function(data) {
+//    console.log(data.key)
+//   })
+// })
+// // 
 
 // create an event & add it to a user...
 $('#add-event').click(function(e) {
@@ -85,19 +125,17 @@ $('#add-event').click(function(e) {
     eventName: eventName,
     eventDate: eventDate,
     location: { id: '.asdnlakndga' },
-    eventMembers: [currentUser]    
+    //eventMembers: [currentUser]    
   }).then(function() {
-    var events = []
-    database.ref('/users/' + currentUser).once('value').then(function(snapshot) {
-      if (snapshot.val().userEvents !== undefined) {
-        events = snapshot.val().userEvents
-      }
-
-      events.push(newEvent.key);
-
-      database.ref('/users/' + currentUser).update({userEvents: events});
-
-    })
+    newEvent.child('eventMembers/' + currentUser).set({id: 'yeah'});
+    // var events = [];
+    // database.ref('/users/' + currentUser).once('value').then(function(snapshot) {
+    //   if (snapshot.val().userEvents !== undefined) {
+    //     events = snapshot.val().userEvents
+    //   }
+    //   events.push(newEvent.key);
+    //   database.ref('/users/' + currentUser).update({userEvents: events});
+    // })
   })
   
 })
@@ -108,8 +146,9 @@ $('#add-event').click(function(e) {
 //   eventName: 'New Event...'
 // })
 
-// database.ref('/users').push({
+// database.ref('users/' + 'jstevens').set({
 //   firstName: 'Josh',
-//   lastName: 'Stevens'
+//   lastName: 'Stevens',
+//   userName: 'jstevens'
 // })
 
