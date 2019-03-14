@@ -10,23 +10,42 @@
 </head>
 <body>
   <div class="wrapper">
+		<header>
+			
+		</header>
 
+		<div id="login">
 			<div id="firebaseui-auth-container"></div>
+		</div>
 
-		<form>
-			<label>Name your event.</label>
-			<input id="event-name" type="text" placeholder="Cool event...">
-			<input id="event-date" type="date">
-			<button id="add-event">Submit</button>
-		</form>
+		<div id="profile">
+			<h1>Hello, User Name!</h1>
+			<div><button>Create an event</button></div>
+			<div>
+				<h2>You have ** upcoming events</h2>
+				<ul>
+					<li>
+						<h3>Here's an event.</h3>
+						<div class="details">
+							<span>You're going</span>
+							<p>Here are the details.</p>
+							<button id="remove-event">Remove</button>
+					</li>
+				</ul>
+			</div>
+		</div>
 
-
-		<div id="user-profile">
-			<h1 id="user-name"></h1>
-			<div id="user-events"></div>
-			<div id="user-friends"></div>
+		<div id="create-event">
+			<form>
+				<label>Name your event.</label>
+				<input id="event-name" type="text" placeholder="Cool event...">
+				<input id="event-date" type="date">
+				<button id="add-event">Submit</button>
+			</form>
 		</div>
 		
+		
+		<button id="sign-out">Sign Out</button>
 
 	</div>
 
