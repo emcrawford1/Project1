@@ -74,11 +74,18 @@ function init() {
   })
     
   function renderEventsListItem(item) {
+    var status = '';
+    item.child('eventMembers').forEach(function(snapshot) {
+      if (snapshot.val().member === currentUserProf) {
+        status = snapshot.val().response;
+      }
+    })
     var eventItem = $('<li>').addClass('eventsListItem');
     eventItem.attr('id', item.key)
     var eventTitle = $('<h3>').text(item.val().eventName);
-    //var eventResponse = $('Going: ' + item.val())
-    eventItem.append(eventTitle);
+    var eventResponse = $('<span>');
+    eventResponse.text('Response: ' + status)
+    eventItem.append(eventTitle, eventResponse);
     if (!$('#' + item.key).length) {
       $('#user-events').append(eventItem);
     }
