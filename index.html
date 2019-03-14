@@ -7,6 +7,7 @@
 	<title>Plan It</title>
 	<link href="./assets/styles/styles.css" rel="stylesheet">
 </head>
+
 <body>
   <div class="wrapper">
 
@@ -27,11 +28,30 @@
 			</div>
 		</div><!-- end yelp -->
 
-		
+
 		<div id="created-event">
 			<!-- the selected event details will go here.-->
 			<div id="friends"></div>
 		</div>
+
+		<div id="transportation">
+				<input id="origin-input" class="controls" type="text"
+				placeholder="Enter an origin location">
+	
+			<input id="destination-input" class="controls" type="text"
+				placeholder="Enter a destination location">
+	<input type="radio" name="type" id="changemode-driving">
+			  <label for="changemode-driving">Driving</label>
+			</div>
+		</div>
+	</table>
+
+	<table class="tbl-map">
+		<tr>
+			<td><div id="map"></div></td>
+			<td><div id="panel-direction"></div></td>
+		</tr>
+	</table>
 
 	</div>
 
@@ -40,8 +60,12 @@
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 	crossorigin="anonymous"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
 	<script src="./assets/scripts/firebase.js"></script>
 	<script src="./assets/scripts/calendar.js"></script>
 	<script src="./assets/scripts/yelp.js"></script>
+	<script src="./assets/scripts/transportation.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAI9SOsxzB1lEnt7jcucAM78gmRhPjnjWE&libraries=places&callback=initMap"
+	async defer></script>
 </body>
 </html>
