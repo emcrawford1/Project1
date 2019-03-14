@@ -1,4 +1,10 @@
 
+var currentUser = null;
+var userEmail = null;
+var userName = null;
+
+
+
 var config = {
   apiKey: "AIzaSyAl_ivk9jeCwqIPtiD0bbTBPrgiSQDa0R4",
   authDomain: "plan-it-project.firebaseapp.com",
@@ -11,28 +17,21 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-
 var uiConfig = {
   signInSuccessUrl: '/datacalls.html',
   signInOptions: [
-    // Leave the lines as is for the providers you want to offer your users.
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
   ],
 };
 
-// Initialize the FirebaseUI Widget using Firebase.
 var ui = new firebaseui.auth.AuthUI(firebase.auth());
-// The start method will wait until the DOM is loaded.
 ui.start('#firebaseui-auth-container', uiConfig);
-
-var currentUser = null;
-var userEmail = null;
-var userName = null;
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-    $('#firebaseui-auth-container').hide();
+    $('#login').hide();
+    $('#profile').show();
     userName = user.displayName;
     userEmail = user.email;
     currentUser = user.uid;
@@ -53,13 +52,11 @@ firebase.auth().onAuthStateChanged(function(user) {
           })
         }
       })
-        
     })
-
   } else {
-    console.log('logged out');
-    $('#firebaseui-auth-container').show();
-    $('#sign-out').hide()
+    $('#login').show();
+    $('#profile').hide();
+    $('#sign-out').hide();
   }
 })
 
@@ -70,72 +67,29 @@ $('#sign-out').click(function(e) {
 })
 
 
-var currentUser = 'jstevens'
-
-function getEvent(id) {
-  console.log(id);
-  database.ref('/events/' + id).on('child_added', function(snapshot) {
-    console.log(snapshot.val().eventDate)
-  })
-}
-
-
-database.ref('users').on("child_added", function(childSnapshot) {
-  var myEvents = childSnapshot.val().userEvents;
-  //console.log(childSnapshot.val().userName)
-
-  // myEvents.forEach(function(event) {
-  //   getEvent(event)    
-  // })
-
-
-  // console.log(childSnapshot.val().userEvents)
-  // database.ref('/users/' + childSnapshot.key).child("userEvents").on("child_added", function(snap) {
-  //   console.log(snap.val())
-  // })
-  
-})
-
-// database.ref('/users').on("child_changed", function(childSnapshot) {
-//   //console.log(childSnapshot.key)
- 
-// 
+// function getEvent(id) {
+//   console.log(id);
+//   database.ref('/events/' + id).on('child_added', function(snapshot) {
+//     console.log(snapshot.val().eventDate)
+//   })
+// }
 
 function renderEventsListItem(item) {
+  console.log(item)
   var listItem = $('<li>').addClass('eventsListItem');
-  listItem.text(item.eventOwner);
+  listItem.text(item.eventName);
   $('#user-events').append(listItem);
 }
 
-database.ref('events').on('child_added', function(childSnapshot) {
-  var members = childSnapshot.val().eventMembers;
-  if (members !== undefined) {
-    if (Object.keys(members).includes(currentUser)) {
-      renderEventsListItem(childSnapshot.val())
+var myEvents = [];
+
+database.ref('events').on('child_added', function(snapshot) {
+  snapshot.forEach(function(childSnaphot) {
+    if (childSnaphot.val().member === currentUser) {
+     renderEventsListItem(snapshot.val())
     }
-  }
+  })
 });
-
-database.ref('events').on('child_changed', function(childSnapshot) {
-  var members = childSnapshot.val().eventMembers;
-  if (members !== undefined) {
-    if (Object.keys(members).includes(currentUser)) {
-      renderEventsListItem(childSnapshot.val())
-    }
-  }
-});
-
-
-
-
-
-// database.ref('/events').orderByChild('eventMembers').on("value", function(snapshot) {
-  
-//   snapshot.forEach(function(data) {
-//    console.log(data.key)
-//   })
-// })
-// // 
 
 // create an event & add it to a user...
 $('#add-event').click(function(e) {
@@ -144,16 +98,15 @@ $('#add-event').click(function(e) {
   var eventName = $('#event-name').val().trim();
   var eventDate = $('#event-date').val().trim();
 
-  //
   var newEvent = database.ref('/events').push();
   newEvent.set({
     eventOwner: currentUser,
     eventName: eventName,
     eventDate: eventDate,
     location: { id: '.asdnlakndga' },
-    //eventMembers: [currentUser]    
   }).then(function() {
-    newEvent.child('eventMembers/' + currentUser).set({id: 'yeah'});
+    //newEvent.child('eventMembers/' + currentUser).set({id: 'yeah'});
+    newEvent.child('eventMembers').set({ member: currentUser, response: 'pending' })
     // var events = [];
     // database.ref('/users/' + currentUser).once('value').then(function(snapshot) {
     //   if (snapshot.val().userEvents !== undefined) {
@@ -166,15 +119,7 @@ $('#add-event').click(function(e) {
   
 })
 
-
-
-// database.ref('/events').push({
-//   eventName: 'New Event...'
-// })
-
-// database.ref('users/' + 'jstevens').set({
-//   firstName: 'Josh',
-//   lastName: 'Stevens',
-//   userName: 'jstevens'
-// })
-
+$('#start-event').click(function() {
+  $('#profile').hide();
+  $('#create-event').show();
+})
