@@ -131,6 +131,8 @@ function postDetailsToDOM(busDetails) {
 
 }
 
+//This function converts the hours the business is open from military time to nonmilitary time.  It does not currently 
+//work.  Modifications will need to be made before it is implemented (the splice function does not work on a string).
 
 function convertHours(convertThisTime) {
 
