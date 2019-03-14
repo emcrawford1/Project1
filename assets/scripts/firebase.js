@@ -1,9 +1,7 @@
-
 var currentUser = null;
 var userEmail = null;
 var userName = null;
 var currentUserProf = null;
-
 
 var config = {
   apiKey: "AIzaSyAl_ivk9jeCwqIPtiD0bbTBPrgiSQDa0R4",
@@ -65,10 +63,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 })
 
 function init() {
-  $('#sign-out').click(function(e) {
-    e.preventDefault()
-    firebase.auth().signOut()
-  })
   
   database.ref('users').on('child_added', function(snapshot) {
     if (snapshot.key !== currentUserProf) {
@@ -78,12 +72,7 @@ function init() {
       $('#friends-container').append(friend);
     }
   })
-  
-  $(document).on('click', '.friend', function() {
-    $(this).toggleClass('selected');
-  })
-  
-  
+    
   function renderEventsListItem(item) {
     var eventItem = $('<li>').addClass('eventsListItem');
     eventItem.attr('id', item.key)
@@ -106,9 +95,7 @@ function init() {
       }
     }) 
   });
-  
-  // for some reason this is duplicating calls on the most recent
-  
+    
   database.ref('events').on('child_added', function(snapshot) {
     snapshot.child('eventMembers').forEach(function(childSnaphot) {
       if (childSnaphot.val().member === currentUserProf) {
@@ -116,45 +103,53 @@ function init() {
       }
     }) 
   });
-  
-  // create an event & add it to a user...
-  $('#add-event').click(function(e) {
-    e.preventDefault();
-  
-    var eventName = $('#event-name').val().trim();
-    var eventDate = $('#event-date').val().trim();
-    var friends = []
     
-    $('.selected').each(function() {
-      friends.push($(this).data('id'));
-    });
-  
-    var newEvent = database.ref('/events').push();
-    newEvent.set({
-      eventOwner: currentUserProf,
-      eventName: eventName,
-      eventDate: eventDate,
-      location: { id: '.asdnlakndga', address: '123 main street, nashville, tn' },
-    }).then(function() {
-      newEvent.child('eventMembers').push({ member: currentUserProf, response: 'going' })
-      friends.forEach(function(friend) {
-        newEvent.child('eventMembers').push({ member: friend, response: 'none'})
-      })
-  
-      $('#create-event').hide();
-      $('#profile').show();
-  
-    })
-  })
-  
-  $('#start-event').click(function() {
-    $('#profile').hide();
-    $('#create-event').show();
-  })
-  
-
-
-
 
 }
+
+$(document).on('click', '.friend', function() {
+  $(this).toggleClass('selected');
+})
+
+$(document).on('click', '#start-event', function(e) {
+  e.preventDefault()
+  $('#profile').hide();
+  $('#create-event').show();
+})
+
+$(document).on('click', '#sign-out', function(e) {
+  e.preventDefault();
+  firebase.auth().signOut();
+})
+
+// create an event & add it to a user...
+$(document).on('click', '#add-event', function(e) {
+  e.preventDefault();
+
+  var eventName = $('#event-name').val().trim();
+  var eventDate = $('#event-date').val().trim();
+  var friends = []
+  
+  $('.selected').each(function() {
+    friends.push($(this).data('id'));
+  });
+
+  var newEvent = database.ref('/events').push();
+  newEvent.set({
+    eventOwner: currentUserProf,
+    eventName: eventName,
+    eventDate: eventDate,
+    location: { id: '.asdnlakndga', address: '123 main street, nashville, tn' },
+  }).then(function() {
+    newEvent.child('eventMembers').push({ member: currentUserProf, response: 'going' })
+    friends.forEach(function(friend) {
+      newEvent.child('eventMembers').push({ member: friend, response: 'none'})
+    })
+
+    $('#create-event').hide();
+    $('#profile').show();
+
+  })
+})
+
 
