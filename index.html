@@ -7,6 +7,7 @@
 	<title>Plan It</title>
 	<link href="./assets/styles/styles.css" rel="stylesheet">
 </head>
+
 <body>
   <div class="wrapper">
 
@@ -34,8 +35,23 @@
 		</div>
 
 		<div id="transportation">
-			<!-- transportation info here...-->
+				<input id="origin-input" class="controls" type="text"
+				placeholder="Enter an origin location">
+	
+			<input id="destination-input" class="controls" type="text"
+				placeholder="Enter a destination location">
+	<input type="radio" name="type" id="changemode-driving">
+			  <label for="changemode-driving">Driving</label>
+			</div>
 		</div>
+	</table>
+
+	<table class="tbl-map">
+		<tr>
+			<td><div id="map"></div></td>
+			<td><div id="panel-direction"></div></td>
+		</tr>
+	</table>
 
 	</div>
 
@@ -48,5 +64,7 @@
 	<script src="./assets/scripts/calendar.js"></script>
 	<script src="./assets/scripts/yelp.js"></script>
 	<script src="./assets/scripts/transportation.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAI9SOsxzB1lEnt7jcucAM78gmRhPjnjWE&libraries=places&callback=initMap"
+	async defer></script>
 </body>
 </html>
