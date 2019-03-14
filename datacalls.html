@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Plan It</title>
+	<link href="./assets/styles/styles.css" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+</head>
+<body>
+  <div class="wrapper">
+		<header>
+
+		</header>
+
+		<div id="login">
+			<div id="firebaseui-auth-container"></div>
+		</div>
+
+		<div id="profile" style="display: block">
+			<h1>Hello, User Name!</h1>
+			<button id="start-event">Create an event</button>
+			<div>
+				<h2>Here are your upcoming events</h2>
+				<ul id="user-events">
+					<!-- <li>
+						<h3>Here's an event.</h3>
+						<div class="details">
+							<span>You're going</span>
+							<p>Here are the details.</p>
+							<button id="remove-event">Remove</button>
+					</li> -->
+				</ul>
+			</div>
+		</div>
+
+		<div id="create-event" style="display:none">
+			<form>
+				<input id="event-name" type="text" placeholder="Give your event a name" autocomplete="off">
+				<label>Choose a day</label>
+				<input id="event-date" type="date">
+				<label for="description">Event Description</label>
+				<textarea id="description"></textarea>
+				<h2>Add a friend</h2>
+				<ul id="friends-container">
+				</ul>
+				<button id="add-event">Submit</button>
+			</form>
+		</div>
+		
+		
+		<button id="sign-out">Sign Out</button>
+
+	</div>
+
+	</div><!-- end wrapper-->
+	<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	crossorigin="anonymous"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+	<script src="./assets/scripts/firebase.js"></script>
+	<script src="./assets/scripts/profile.js"></script>
+	<script src="./assets/scripts/events.js"></script>
+	<script src="./assets/scripts/calendar.js"></script>
+	<script src="./assets/scripts/yelp.js"></script>
+	<script src="./assets/scripts/transportation.js"></script>
+</body>
+</html>
