@@ -22,7 +22,7 @@
 			<h1>Hello, User Name!</h1>
 			<button id="start-event">Create an event</button>
 			<div>
-				<h2>You have ** upcoming events</h2>
+				<h2>Here are your upcoming events</h2>
 				<ul id="user-events">
 					<!-- <li>
 						<h3>Here's an event.</h3>
@@ -35,11 +35,17 @@
 			</div>
 		</div>
 
-		<div id="create-event" style="display:none">
+		<div id="create-event" style="display:block">
 			<form>
 				<label>Name your event.</label>
-				<input id="event-name" type="text" placeholder="Cool event...">
+				<input id="event-name" type="text" placeholder="Cool event..." autocomplete="off">
+				<label>Choose a day</label>
 				<input id="event-date" type="date">
+				<label for="description">Event Description</label>
+				<textarea id="description"></textarea>
+				<h2>Add a friend</h2>
+				<ul id="friends-container">
+				</ul>
 				<button id="add-event">Submit</button>
 			</form>
 		</div>

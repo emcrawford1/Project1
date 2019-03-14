@@ -2,7 +2,7 @@
 var currentUser = null;
 var userEmail = null;
 var userName = null;
-
+var currentUserProf = null;
 
 
 var config = {
@@ -30,28 +30,30 @@ ui.start('#firebaseui-auth-container', uiConfig);
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-    $('#login').hide();
-    $('#profile').show();
     userName = user.displayName;
     userEmail = user.email;
     currentUser = user.uid;
-    user.getIdToken().then(function(accessToken) {
-      var userExists = false
-      database.ref('users').once('value', function(snapshot) {
-        snapshot.forEach(function(childSnaphot) {
-          if (childSnaphot.val().userID === currentUser) {
-            userExists = true;
-          }
-        })
-      }).then(function() {
-        if (!userExists) {
-          database.ref('users').push({
-            userID: currentUser,
-            userName: userName,
-            userEmail: userEmail
-          })
+    
+    $('#login').hide();
+    $('#profile > h1').text('Hello, ' + userName + '!');
+    $('#profile').show();
+    
+    var userExists = false
+    database.ref('users').once('value', function(snapshot) {
+      snapshot.forEach(function(childSnaphot) {
+        if (childSnaphot.val().userID === currentUser) {
+          currentUserProf = childSnaphot.key;
+          userExists = true;
         }
       })
+    }).then(function() {
+      if (!userExists) {
+        database.ref('users').push({
+          userID: currentUser,
+          userName: userName,
+          userEmail: userEmail
+        })
+      }
     })
   } else {
     $('#login').show();
@@ -60,35 +62,50 @@ firebase.auth().onAuthStateChanged(function(user) {
   }
 })
 
-
 $('#sign-out').click(function(e) {
   e.preventDefault()
   firebase.auth().signOut()
 })
 
+database.ref('users').on('child_added', function(snapshot) {
+  var friend = $('<li>').addClass('friend');
+  friend.attr('data-id', snapshot.key);
+  friend.text(snapshot.val().userName);
+  $('#friends-container').append(friend);
+})
 
-// function getEvent(id) {
-//   console.log(id);
-//   database.ref('/events/' + id).on('child_added', function(snapshot) {
-//     console.log(snapshot.val().eventDate)
-//   })
-// }
+$(document).on('click', '.friend', function() {
+  $(this).toggleClass('selected');
+})
+
 
 function renderEventsListItem(item) {
-  console.log(item)
-  var listItem = $('<li>').addClass('eventsListItem');
-  listItem.text(item.eventName);
-  $('#user-events').append(listItem);
+  var eventItem = $('<li>').addClass('eventsListItem');
+  eventItem.attr('id', item.key)
+  var eventTitle = $('<h3>').text(item.val().eventName);
+  //var eventResponse = $('Going: ' + item.val())
+  eventItem.append(eventTitle);
+  $('#user-events').append(eventItem);
 }
 
-var myEvents = [];
+database.ref('events').on('child_removed', function(oldChildSnapshot) {
+  $('#' + oldChildSnapshot.key).remove();
+});
+
+database.ref('events').on('child_changed', function(snapshot) {
+  snapshot.child('eventMembers').forEach(function(childSnaphot) {
+    if (childSnaphot.val().member === currentUserProf) {
+      renderEventsListItem(snapshot)
+    }
+  }) 
+});
 
 database.ref('events').on('child_added', function(snapshot) {
-  snapshot.forEach(function(childSnaphot) {
-    if (childSnaphot.val().member === currentUser) {
-     renderEventsListItem(snapshot.val())
+  snapshot.child('eventMembers').forEach(function(childSnaphot) {
+    if (childSnaphot.val().member === currentUserProf) {
+      renderEventsListItem(snapshot)
     }
-  })
+  }) 
 });
 
 // create an event & add it to a user...
@@ -97,26 +114,28 @@ $('#add-event').click(function(e) {
 
   var eventName = $('#event-name').val().trim();
   var eventDate = $('#event-date').val().trim();
+  var friends = []
+  
+  $('.friend.selected').each(function() {
+    friends.push($(this).data('id'));
+  });
 
   var newEvent = database.ref('/events').push();
   newEvent.set({
-    eventOwner: currentUser,
+    eventOwner: currentUserProf,
     eventName: eventName,
     eventDate: eventDate,
-    location: { id: '.asdnlakndga' },
+    location: { id: '.asdnlakndga', address: '123 main street, nashville, tn' },
   }).then(function() {
-    //newEvent.child('eventMembers/' + currentUser).set({id: 'yeah'});
-    newEvent.child('eventMembers').set({ member: currentUser, response: 'pending' })
-    // var events = [];
-    // database.ref('/users/' + currentUser).once('value').then(function(snapshot) {
-    //   if (snapshot.val().userEvents !== undefined) {
-    //     events = snapshot.val().userEvents
-    //   }
-    //   events.push(newEvent.key);
-    //   database.ref('/users/' + currentUser).update({userEvents: events});
-    // })
+    newEvent.child('eventMembers').push({ member: currentUserProf, response: 'going' })
+    friends.forEach(function(friend) {
+      newEvent.child('eventMembers').push({ member: friend, response: 'none'})
+    })
+
+    $('#create-event').hide();
+    $('#profile').show();
+
   })
-  
 })
 
 $('#start-event').click(function() {
