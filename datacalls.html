@@ -6,78 +6,120 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Plan It</title>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.css" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="./assets/styles/bulma-calendar.min.css">
 	<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
-	<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 	<link href="./assets/styles/styles.css" rel="stylesheet">
+	<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 </head>
 <body>
+		<nav class="navbar" role="navigation" aria-label="main navigation">
+				<div class="navbar-brand">
+					<a class="navbar-item" href="https://bulma.io">
+						<img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: Free, open source, & modern CSS framework based on Flexbox" width="112" height="28">
+					</a>
+			
+					<div class="navbar-end">
+							<div class="navbar-item">
+								<div class="buttons">
+									<a class="button is-primary">
+										<strong>Sign up</strong>
+									</a>
+									<a class="button is-light">
+										Log in
+									</a>
+								</div>
+							</div>
+						</div>
+				</div>
+			</nav>	
+	
+
   <div class="section wrapper">
-
-
-		<section id="login">
-			<h1 class="title">PlanIt</h1>
-			<p class="subtitle">Log in to get started</p>
-			<div id="firebaseui-auth-container"></div>
-		</section>
-
-		<section id="profile" style="display: block">
-			<h1 class="title">Hello, User Name!</h1>
-			<button id="start-event">Create an event</button>
-			<div>
-				<h2>Here are your upcoming events</h2>
-				<ul id="user-events">
-					<!-- <li>
-						<h3>Here's an event.</h3>
-						<div class="details">
-							<span>You're going</span>
-							<p>Here are the details.</p>
-							<button id="remove-event">Remove</button>
-					</li> -->
-				</ul>
+		<section class="section" id="login">
+			<div class="container">
+				<h1 class="title">PlanIt</h1>
+				<p class="subtitle">Log in to get started</p>
+				<div id="firebaseui-auth-container"></div>
 			</div>
 		</section>
 
-		<section id="create-event" style="display:none">
-			<h1 class="title">Create an event</h1>
-			<form>
-				<div class="field">
-					<label class="label">Name your event</label>
-					<div class="control">
-						<input id="event-name" class="input is-large" type="text" placeholder="Give your event a name" autocomplete="off">
-					</div>
-				</div>
+		<section class="section" id="profile" style="display: block">
+			<div class="container">
+				<h1 class="title">Hello, User Name!</h1>
+				<button id="start-event" class="button is-primary is-large">Create an event</button>
+				<h2 class="title">Your upcoming plans</h2>
+				<div id="user-events" class="columns"></div>
+			</div>
+		</section>
 
-				<div class="field">
-					<label class="label">Choose a day</label>
-					<div class="control">
-						<input id="event-date" class="input is-large" type="date">
+		<section class="section" id="create-event" style="display:none">
+			<div class="container">
+				<h1 class="title">Create an event</h1>
+				<form>
+					<div class="field">
+						<label class="label">Name your event</label>
+						<div class="control">
+							<input id="event-name" class="input is-large" type="text" placeholder="Give your event a name" autocomplete="off">
+						</div>
 					</div>
-				</div>
 
-				<div class="field">
-					<label class="label">Describe your event</label>
-					<div class="control">
-						<textarea id="event-description" class="textarea"></textarea>
+					<div class="field">
+						<label class="label">Choose a day</label>
+						<div class="control">
+							<input id="event-date" class="input is-large" type="date">
+						</div>
 					</div>
-				</div>
-				
-				<div class="field">
-					<label class="label">Choose a place</label>
-					<div class="control">
-						<input id="event-location" class="input is-large" placeholder="Add a city and state, or zip" autocomplete="off">
+
+					<div class="field">
+							<label class="label">Choose a time</label>
+							<div class="control">
+								<input id="event-time" class="input is-large" type="time">
+							</div>
+						</div>
+
+					<div class="field">
+						<label class="label">Describe your event</label>
+						<div class="control">
+							<textarea id="event-description" class="textarea"></textarea>
+						</div>
 					</div>
-				</div>
-				<button id="location-search" class="button is-link">Search location</button>
-				
+					
+					<div class="field">
+						<label class="label">Choose a place</label>
+						<div class="control">
+							<input id="event-location" class="input is-large" placeholder="Add a city and state, or zip" autocomplete="off">
+						</div>
+					</div>
+					<button id="location-search" class="button is-link">Search location</button>
+					
 
-				<!-- HAVE THIS BE A MODAL -->
-				<div id="yelp-results"></div>
+					<!-- HAVE THIS BE A MODAL -->
+					<div id="yelp-results" class="modal">
+						<div class="modal-background">
+							<div class="modal-content" style="max-height: 100vh">
+								<div class="container">
 
-				<h2>Add a friend</h2>
-				<ul id="friends-container">
-				</ul>
-				<button id="add-event" class="button is-text">Submit</button>
-			</form>
+								</div>
+							</div>
+						</div>
+						<button class="modal-close is-large" aria-label="close"></button>
+					</div>
+
+					<h3 class="title is-3">Add friends</h3>
+					<div id="friends-container" class="columns">
+					</div>
+					<div class="field is-grouped">
+						<p class="control">
+							<button id="add-event" class="button is-link">Submit</button>
+						</p>
+						<p class="control">
+							<button id="cancel-event" class="button">Cancel</button>
+						</p>						
+						
+					</div>
+					
+				</form>
+			</div>
 		</section>
 		
 		
@@ -90,6 +132,7 @@
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 	crossorigin="anonymous"></script>
+	<script src="./assets/scripts/bulma-calendar.min.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
 	<script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
 	<script src="./assets/scripts/firebase.js"></script>
