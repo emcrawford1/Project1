@@ -69,23 +69,45 @@ function getYelpResults(searchType, key, searchParam_1, searchParam_2) {
 
 function postToDOM(apiResponse) {
 
-    console.log(apiResponse);
+    // console.log(apiResponse);
 
     apiResponse.businesses.forEach(function(val, idx) {
         
-        var newRow = $("<tr id=" + idx + ">")
-        .attr('data-yelp-id', val.id)
-        .append(
-            $("<td>").text(val.name),
-            $("<td>").text(val.display_phone),
-            $("<td>").text(val.rating),
-            $("<td>").text(val.review_count),
-            $("<td>").text(val.price),
-            $("<td>").text(val.location.display_address)
-        )
-        newRow.addClass("detailsButton");
+        var business = $("<div>").attr('id', idx).attr('data-yelp-id', val.id).addClass('businessListing');
 
-        $('#yelp-results').append(newRow);
+        
+        
+        var restName = $('<h2>').text(val.name);
+        var restAddr = $('<p>').addClass('address')
+        .text(val.location.display_address);
+
+        var restDeets = $('<div>').addClass('restDeets');
+        restDeets.append(restName, restAddr);
+
+        var restPrice = $('<div>').addClass('price').text(val.price);
+        var restRating = $('<div>').addClass('rating').text(val.rating);
+        var restRatingCount = $('<div>').addClass('ratingCount').text(val.review_count);
+        var rating = $('<div>').append(restRating, restRatingCount)
+
+        var rating = $('<div>').append(restRating, restRatingCount);
+        var ratingPriceContainer = $('<div>').addClass('ratingPriceContainer').append(rating, restPrice);
+
+
+        var selectedIndicator = $('<div>').addClass('indicator').text('x');
+
+        // .append(
+        //     $("<td>").text(val.name),
+        //     $("<td>").text(val.display_phone),
+        //     $("<td>").text(val.rating),
+        //     $("<td>").text(val.review_count),
+        //     $("<td>").text(val.price),
+        //     $("<td>").text(val.location.display_address)
+        // )
+        // newRow.addClass("detailsButton");
+
+        business.append(ratingPriceContainer, restDeets, selectedIndicator);
+
+        $('#yelp-results').append(business);
 
     
     })

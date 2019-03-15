@@ -1,3 +1,37 @@
 .detailsButton.selected {
   color: red;
 }
+
+.businessListing {
+  display: flex;
+  flex-direction: row;
+  max-width: 960px;
+  margin-bottom: 10px;
+  border: solid 1px gray;
+  align-items: stretch;
+}
+
+.ratingPriceContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: stretch;
+  justify-content: stretch;
+  border: solid 1px black;
+}
+
+.restDeets {
+  flex: 5;
+}
+
+.indicator {
+  flex: 1;
+}
+
+.rating {
+  display: block;
+  font-size: 1.4em;
+  flex: 2;
+  background: blue;
+}

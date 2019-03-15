@@ -5,21 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Plan It</title>
-	<link href="./assets/styles/styles.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.css" rel="stylesheet">
 	<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+	<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+	<link href="./assets/styles/styles.css" rel="stylesheet">
 </head>
 <body>
-  <div class="wrapper">
-		<header>
+  <div class="section wrapper">
 
-		</header>
 
-		<div id="login">
+		<section id="login">
+			<h1 class="title">PlanIt</h1>
+			<p class="subtitle">Log in to get started</p>
 			<div id="firebaseui-auth-container"></div>
-		</div>
+		</section>
 
-		<div id="profile" style="display: block">
-			<h1>Hello, User Name!</h1>
+		<section id="profile" style="display: block">
+			<h1 class="title">Hello, User Name!</h1>
 			<button id="start-event">Create an event</button>
 			<div>
 				<h2>Here are your upcoming events</h2>
@@ -33,13 +35,40 @@
 					</li> -->
 				</ul>
 			</div>
-		</div>
+		</section>
 
 		<div id="create-event" style="display:none">
+			<h1 class="title">Create an event</h1>
 			<form>
-				<input id="event-name" type="text" placeholder="Give your event a name" autocomplete="off">
-				<label>Choose a day</label>
-				<input id="event-date" type="date">
+				<div class="field is-horizontal">
+					<div class="field-label is-normal">
+						<label class="label">Name your event</label>
+					</div>
+					<div class="field-body">
+						<div class="field">
+							<p class="control">
+								<input id="event-name" class="input is-large" type="text" placeholder="Give your event a name" autocomplete="off">
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="field is-horizontal">
+					<div class="field-label is-normal">
+						<label class="label">Choose a day</label>
+					</div>
+					<div class="field-body">
+						<div class="field">
+							<p class="control">
+								<input id="event-date" class="input is-large" type="date">
+							</p>
+						</div>
+					</div>
+				</div>
+
+
+				
+				
 				<label for="description">Event Description</label>
 				<textarea id="event-description"></textarea>
 
@@ -54,6 +83,8 @@
 				</ul>
 				<button id="add-event">Submit</button>
 			</form>
+
+
 		</div>
 		
 		
