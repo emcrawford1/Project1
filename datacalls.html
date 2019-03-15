@@ -41,7 +41,14 @@
 				<label>Choose a day</label>
 				<input id="event-date" type="date">
 				<label for="description">Event Description</label>
-				<textarea id="description"></textarea>
+				<textarea id="event-description"></textarea>
+
+				<label>Choose a place</label>
+				<input id="event-location" placeholder="Add a city and state, or zip" autocomplete="off">
+				<button id="location-search">Search</button>
+
+				<div id="yelp-results"></div>
+
 				<h2>Add a friend</h2>
 				<ul id="friends-container">
 				</ul>

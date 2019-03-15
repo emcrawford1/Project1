@@ -43,6 +43,7 @@ function getBusinessHours(id) {
 
 //This function performs an ajax call to Yelp using the zip code or city name and returns a list of restaurants along with other misc data (i.e. rating, number of 
 //ratings, cost, etc.)
+var yelpResponse;
 
 function getYelpResults(searchType, key, searchParam_1, searchParam_2) {
     var queryURL = "https://api.yelp.com/v3" + searchType + key + searchParam_1 + searchParam_2;
@@ -57,12 +58,8 @@ function getYelpResults(searchType, key, searchParam_1, searchParam_2) {
         }
 
     }).then(function (response) {
-
-        console.log(response);
-
-
-        postToDOM(response);
-
+        yelpResponse = response;
+        postToDOM(yelpResponse);
     })
 
 }
@@ -73,22 +70,26 @@ function getYelpResults(searchType, key, searchParam_1, searchParam_2) {
 function postToDOM(apiResponse) {
 
     console.log(apiResponse);
-    for (var i = 0; i < apiResponse.businesses.length; i++) {
 
-        var newRow = $("<tr data-id=" + apiResponse.businesses[i].id + ">").append(
-            $("<td>").text(apiResponse.businesses[i].name),
-            $("<td>").text(apiResponse.businesses[i].display_phone),
-            $("<td>").text(apiResponse.businesses[i].rating),
-            $("<td>").text(apiResponse.businesses[i].review_count),
-            $("<td>").text(apiResponse.businesses[i].price),
-            $("<td>").text(apiResponse.businesses[i].location.display_address)
-
+    apiResponse.businesses.forEach(function(val, idx) {
+        
+        var newRow = $("<tr id=" + idx + ">")
+        .attr('data-yelp-id', val.id)
+        .append(
+            $("<td>").text(val.name),
+            $("<td>").text(val.display_phone),
+            $("<td>").text(val.rating),
+            $("<td>").text(val.review_count),
+            $("<td>").text(val.price),
+            $("<td>").text(val.location.display_address)
         )
         newRow.addClass("detailsButton");
 
         $('#yelp-results').append(newRow);
 
-    }
+    
+    })
+    
 
 }
 
@@ -162,17 +163,26 @@ function convertHours(convertThisTime) {
 }
 
 
+// $(document).ready(function () {
+
+//     getYelpResults(businessSearch, apiKey, locationURL, locationCity);
+
+//     $(document).on("click", ".detailsButton", function (event) {
+//         var busId = $(this).data("id");
+//         console.log(busId);
+//         getBusinessHours(busId);
+//     })
 
 
-$(document).ready(function () {
+// })
 
-    getYelpResults(businessSearch, apiKey, locationURL, locationCity);
+$(document).on('click', '#location-search', function(e) {
+    e.preventDefault();
+    var citySearch = $('#event-location').val().trim();
+    getYelpResults(businessSearch, apiKey, locationURL, citySearch);
+})
 
-    $(document).on("click", ".detailsButton", function (event) {
-        var busId = $(this).data("id");
-        console.log(busId);
-        getBusinessHours(busId);
-    })
-
-
+$(document).on('click', '.detailsButton', function() {
+    $('.detailsButton').removeClass('selected');
+    $(this).toggleClass('selected');
 })
