@@ -135,9 +135,11 @@ $(document).on('click', '#add-event', function(e) {
 
   var eventName = $('#event-name').val().trim();
   var eventDate = $('#event-date').val().trim();
-  var friends = []
+  var friends = [];
+  var eventID = $('#yelp-results').find('.selected').attr('id');
+  var eventLocation = yelpResponse.businesses[eventID];
   
-  $('.selected').each(function() {
+  $('friend.selected').each(function() {
     friends.push($(this).data('id'));
   });
 
@@ -146,7 +148,7 @@ $(document).on('click', '#add-event', function(e) {
     eventOwner: currentUserProf,
     eventName: eventName,
     eventDate: eventDate,
-    location: { id: '.asdnlakndga', address: '123 main street, nashville, tn' },
+    eventLocation: eventLocation
   }).then(function() {
     newEvent.child('eventMembers').push({ member: currentUserProf, response: 'going' })
     friends.forEach(function(friend) {
