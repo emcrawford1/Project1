@@ -33,7 +33,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     currentUser = user.uid;
     
     $('#login').hide();
-    $('#profile > h1').text('Hello, ' + userName + '!');
+    $('#profile-name').text('Hello, ' + userName + '!');
     $('#profile').show();
     
     var userExists = false
@@ -153,7 +153,6 @@ function renderEventsListItem(item) {
     return [month, dateArray[2]]
   }
 
-  
 
   var cardColumn = $('<div>').addClass('column').addClass('is-half');
 
@@ -196,6 +195,7 @@ $(document).on('click', '#start-event', function(e) {
 })
 
 $(document).on('click', '#sign-out', function(e) {
+  console.log('click')
   e.preventDefault();
   firebase.auth().signOut();
 })
@@ -242,56 +242,7 @@ $(document).on('click', '#add-event', function(e) {
 
 
 
-
-
-$(document).ready(function() {
-    var calOptions = {
-      type: 'date',
-      showFooter: false,
-      showHeader: false
-    }
+$(document).on('click', 'button', function(e) {
+  e.preventDefault();
+})
     
-    var timeOptions = {
-      type: 'time',
-      showFooter: true
-    }
-    bulmaCalendar.attach('#event-date', calOptions);
-    bulmaCalendar.attach('#event-time', timeOptions);
-
-
-    var dateElement = document.querySelector('#event-date');
-    if (dateElement) {
-      dateElement.bulmaCalendar.on('select', function(datepicker) {
-        dateSelected = datepicker.data.value();
-      })
-    }
-
-    var timeElement = document.querySelector('#event-time');
-    if (timeElement) {
-      timeElement.bulmaCalendar.on('select', function(timepicker) {
-        timeSelected = timepicker.data.value();
-      })
-    }
-
-
-})
-
-
-// var element = $('#event-date');
-// if (element) {
-//   element.bulmaCalendar.on('date:selected', function(datepicker) {
-//     console.log(datepicker.date.value())
-//   })
-// }
-
-// $(time).on('select', function(time) {
-// 	console.log(time);
-// });
-
-// $('#event-date').on('focus', function() {
-//   console.log('click');
-// })
-
-$('.datetimepicker-clear-button').click(function(e){
-  e.preventDefault()
-})

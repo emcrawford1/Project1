@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Plan It</title>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.css" rel="stylesheet">
 	<link type="text/css" rel="stylesheet" href="./assets/styles/bulma-calendar.min.css">
@@ -11,30 +12,31 @@
 	<link href="./assets/styles/styles.css" rel="stylesheet">
 	<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 </head>
-<body>
-		<nav class="navbar" role="navigation" aria-label="main navigation">
-				<div class="navbar-brand">
-					<a class="navbar-item" href="https://bulma.io">
-						<img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: Free, open source, & modern CSS framework based on Flexbox" width="112" height="28">
-					</a>
-			
-					<div class="navbar-end">
-							<div class="navbar-item">
-								<div class="buttons">
-									<a class="button is-primary">
-										<strong>Sign up</strong>
-									</a>
-									<a class="button is-light">
-										Log in
-									</a>
-								</div>
-							</div>
-						</div>
-				</div>
-			</nav>	
-	
 
-  <div class="section wrapper">
+<body>
+	<nav class="navbar" role="navigation" aria-label="main navigation">
+		<div class="navbar-brand">
+			<h1 class="title">PlanIt</h1>
+		</div>
+
+		<div class="navbar-menu is-active">
+			<div class="navbar-end">
+				<div class="navbar-item">
+					<div class="buttons">
+						<a id="sign-out" class="button is-light">
+							Sign out
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</nav>
+
+
+	<div class="wrapper">
+		
 		<section class="section" id="login">
 			<div class="container">
 				<h1 class="title">PlanIt</h1>
@@ -45,8 +47,14 @@
 
 		<section class="section" id="profile" style="display: block">
 			<div class="container">
-				<h1 class="title">Hello, User Name!</h1>
-				<button id="start-event" class="button is-primary is-large">Create an event</button>
+				<div class="columns is-vcentered">
+					<div class="column is-three-quarters">
+						<h1 id="profile-name" class="title">Hello, User Name!</h1>
+					</div>	
+					<div class="column">
+						<button id="start-event" class="button is-primary is-large">Plan an event</button>
+					</div>
+				</div>
 				<h2 class="title">Your upcoming plans</h2>
 				<div id="user-events" class="columns"></div>
 			</div>
@@ -71,11 +79,11 @@
 					</div>
 
 					<div class="field">
-							<label class="label">Choose a time</label>
-							<div class="control">
-								<input id="event-time" class="input is-large" type="time">
-							</div>
+						<label class="label">Choose a time</label>
+						<div class="control">
+							<input id="event-time" class="input is-large" type="time">
 						</div>
+					</div>
 
 					<div class="field">
 						<label class="label">Describe your event</label>
@@ -83,7 +91,7 @@
 							<textarea id="event-description" class="textarea"></textarea>
 						</div>
 					</div>
-					
+
 					<div class="field">
 						<label class="label">Choose a place</label>
 						<div class="control">
@@ -91,7 +99,7 @@
 						</div>
 					</div>
 					<button id="location-search" class="button is-link">Search location</button>
-					
+
 
 					<!-- HAVE THIS BE A MODAL -->
 					<div id="yelp-results" class="modal">
@@ -114,32 +122,27 @@
 						</p>
 						<p class="control">
 							<button id="cancel-event" class="button">Cancel</button>
-						</p>						
-						
+						</p>
+
 					</div>
-					
+
 				</form>
 			</div>
 		</section>
-		
-		
-		<button id="sign-out">Sign Out</button>
+
 
 	</div>
 
 	</div><!-- end wrapper-->
-	<script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-	crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	 crossorigin="anonymous"></script>
 	<script src="./assets/scripts/bulma-calendar.min.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
 	<script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
-	<script src="./assets/scripts/firebase.js"></script>
-	<script src="./assets/scripts/profile.js"></script>
-	<script src="./assets/scripts/events.js"></script>
+	<script src="./assets/scripts/app.js"></script>
 	<script src="./assets/scripts/calendar.js"></script>
 	<script src="./assets/scripts/yelp.js"></script>
 	<script src="./assets/scripts/transportation.js"></script>
 </body>
+
 </html>

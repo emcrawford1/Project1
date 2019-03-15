@@ -1,3 +1,12 @@
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background: black;
+}
+
 .detailsButton.selected {
   color: red;
 }
@@ -38,4 +47,10 @@
 
 .date {
   padding: 0.75em;
+}
+
+.container {
+  background: white;
+  padding: 20px;
+  border-radius: 4px;
 }
