@@ -14,48 +14,51 @@
 </head>
 
 <body>
-	<nav class="navbar" role="navigation" aria-label="main navigation">
-		<div class="navbar-brand">
-			<h1 class="title">PlanIt</h1>
-		</div>
-
-		<div class="navbar-menu is-active">
-			<div class="navbar-end">
-				<div class="navbar-item">
-					<div class="buttons">
-						<a id="sign-out" class="button is-light">
-							Sign out
-						</a>
-					</div>
+	<nav class="navbar" role="navigation" aria-label="main navigation" style="padding: 10px">
+		<div class="level">
+			<div class="level-left">
+				<h1 class="title">PlanIt</h1>
+			</div>
+			<div class="level-right">
+				<div class="buttons">
+					<a id="sign-out" class="button is-light">
+						Sign out
+					</a>
 				</div>
 			</div>
 		</div>
-
-
 	</nav>
 
-
 	<div class="wrapper">
-		
-		<section class="section" id="login">
-			<div class="container">
-				<h1 class="title">PlanIt</h1>
-				<p class="subtitle">Log in to get started</p>
-				<div id="firebaseui-auth-container"></div>
+		<section id="login">
+			<div class="columns is-centered" style="margin-top: 40px">
+				<div class="column is-half">
+					<div class="message is-primary">
+							<div class="message-header"></div>
+							<div class="message-body has-text-centered">
+									<p class="subtitle">Log in to get started</p>
+									<div id="firebaseui-auth-container"></div>
+							</div>
+					</div>
+				</div>
 			</div>
 		</section>
 
 		<section class="section" id="profile" style="display: block">
 			<div class="container">
-				<div class="columns is-vcentered">
-					<div class="column is-three-quarters">
-						<h1 id="profile-name" class="title">Hello, User Name!</h1>
-					</div>	
-					<div class="column">
-						<button id="start-event" class="button is-primary is-large">Plan an event</button>
+				<div class="level">
+					<div class="level-left">
+						<div class="level-item">
+							<h1 id="profile-name" class="title">Hello, User Name!</h1>
+						</div>
+					</div>
+					<div class="level-right">
+						<div class="level-item">
+							<button id="start-event" class="button is-primary is-large">Plan an event</button>
+						</div>
 					</div>
 				</div>
-				<h2 class="title">Your upcoming plans</h2>
+				<h2 class="title is-4 has-text-grey">Your upcoming plans</h2>
 				<div id="user-events" class="columns"></div>
 			</div>
 		</section>
@@ -105,7 +108,7 @@
 					<div id="yelp-results" class="modal">
 						<div class="modal-background">
 							<div class="modal-content" style="max-height: 100vh">
-								<div class="container">
+								<div class="listings-container" style="margin-top: 80px">
 
 								</div>
 							</div>

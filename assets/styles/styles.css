@@ -1,5 +1,6 @@
 html, body {
   height: 100%;
+  min-height: 100%;
   width: 100%;
 }
 
@@ -12,6 +13,24 @@ body {
 }
 
 .businessListing {
+  padding: 20px 0;
+}
+
+.businessListing:nth-of-type(even) {
+  background: rgba(0,0,0,0.05);
+}
+.listings-container {
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.moreDeets {
+  padding: 20px;
+  display: none;
+}
+
+/* .businessListing {
   display: flex;
   flex-direction: row;
   max-width: 960px;
@@ -47,7 +66,7 @@ body {
 
 .date {
   padding: 0.75em;
-}
+} */
 
 .container {
   background: white;

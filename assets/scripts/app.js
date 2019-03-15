@@ -67,8 +67,10 @@ function init() {
   database.ref('users').on('child_added', function(snapshot) {
     if (snapshot.key !== currentUserProf) {
       var friendColumn = $('<div>').addClass('column');
-      var friend = $('<div>').addClass('card').addClass('friend');
-      friend.attr('data-id', snapshot.key);
+      var friend = $('<div>')
+      .addClass('card')
+      .addClass('friend')
+      .attr('data-id', snapshot.key);
       var friendContent = $('<div>').addClass('card-content');
       var friendName = $('<p>').addClass('has-text-weight-bold').text(snapshot.val().userName);
       friendContent.append(friendName);
@@ -153,29 +155,34 @@ function renderEventsListItem(item) {
     return [month, dateArray[2]]
   }
 
-
   var cardColumn = $('<div>').addClass('column').addClass('is-half');
 
-  var card = $('<div>').addClass('card').addClass('eventsListItem');
+  var card = $('<div>').addClass('message').addClass('eventsListItem');
   card.attr('id', item.key);
 
   var date = getDate(item.val().eventDate);
   
-  var cardHeader = $('<header>').addClass('card-header');
-  var cardTitle = $('<p>').addClass('card-header-title').text(date[0] + ' ' + date[1]);
+  var cardHeader = $('<header>').addClass('message-header');
+  var cardTitle = $('<p>').text(date[0] + ' ' + date[1]);
   cardHeader.append(cardTitle);
 
-  var cardContent = $('<div>').addClass('card-content');
+  var cardContent = $('<div>').addClass('message-body');
   var content = $('<div>').addClass('content');
   var eventTitle = $('<h2>').text(item.val().eventName);
   var locationName = $('<h4>').text(item.val().eventLocation.name);
   content.append(eventTitle, locationName);
   cardContent.append(content);
 
-  var cardFooter = $('<footer>').addClass('card-footer');
-  cardFooter.text(status);
+  var goingTag = $('<span>').addClass('tag is-medium is-dark is-capitalized').text(status);
+  var footer = $('<div>').addClass('level');
+  var footerLeft = $('<div>').addClass('level-left');
+  var footerRight = $('<div>').addClass('level-right');
+  var footerItem = $('<div>').addClass('footer-item');
+  footerItem.append(goingTag);
+  footerRight.append(footerItem);
+  footer.append(footerLeft, footerRight).css({ padding: "10px", borderTop: 'solid 1px rgba(0,0,0,0.1)'});
 
-  card.append(cardHeader, cardContent, cardFooter);
+  card.append(cardHeader, cardContent, footer);
   cardColumn.append(card);
 
   if (!$('#' + item.key).length) {
@@ -183,9 +190,10 @@ function renderEventsListItem(item) {
   }
 }
 
-
 $(document).on('click', '.friend', function() {
+  //<i class="fas fa-check-circle"></i>
   $(this).toggleClass('selected');
+  $(this).toggleClass('has-background-primary	has-text-white')
 })
 
 $(document).on('click', '#start-event', function(e) {
@@ -212,14 +220,13 @@ $(document).on('click', '#add-event', function(e) {
   var eventTime = timeSelected;
   var friends = [];
   var eventID = $('#yelp-results').find('.selected').attr('id');
-
-  //var eventLocation = yelpResponse.businesses[eventID];
+  var eventLocation = yelpResponse.businesses[eventID];
   
   $('friend.selected').each(function() {
     friends.push($(this).data('id'));
   });
 
-  console.log(eventName, eventDate, eventTime, friends, eventID)
+  console.log(eventName, eventDate, eventTime, friends, eventID, eventLocation)
 
   // var newEvent = database.ref('/events').push();
   // newEvent.set({
