@@ -37,55 +37,48 @@
 			</div>
 		</section>
 
-		<div id="create-event" style="display:none">
+		<section id="create-event" style="display:none">
 			<h1 class="title">Create an event</h1>
 			<form>
-				<div class="field is-horizontal">
-					<div class="field-label is-normal">
-						<label class="label">Name your event</label>
-					</div>
-					<div class="field-body">
-						<div class="field">
-							<p class="control">
-								<input id="event-name" class="input is-large" type="text" placeholder="Give your event a name" autocomplete="off">
-							</p>
-						</div>
+				<div class="field">
+					<label class="label">Name your event</label>
+					<div class="control">
+						<input id="event-name" class="input is-large" type="text" placeholder="Give your event a name" autocomplete="off">
 					</div>
 				</div>
 
-				<div class="field is-horizontal">
-					<div class="field-label is-normal">
-						<label class="label">Choose a day</label>
-					</div>
-					<div class="field-body">
-						<div class="field">
-							<p class="control">
-								<input id="event-date" class="input is-large" type="date">
-							</p>
-						</div>
+				<div class="field">
+					<label class="label">Choose a day</label>
+					<div class="control">
+						<input id="event-date" class="input is-large" type="date">
 					</div>
 				</div>
 
-
+				<div class="field">
+					<label class="label">Describe your event</label>
+					<div class="control">
+						<textarea id="event-description" class="textarea"></textarea>
+					</div>
+				</div>
 				
+				<div class="field">
+					<label class="label">Choose a place</label>
+					<div class="control">
+						<input id="event-location" class="input is-large" placeholder="Add a city and state, or zip" autocomplete="off">
+					</div>
+				</div>
+				<button id="location-search" class="button is-link">Search location</button>
 				
-				<label for="description">Event Description</label>
-				<textarea id="event-description"></textarea>
 
-				<label>Choose a place</label>
-				<input id="event-location" placeholder="Add a city and state, or zip" autocomplete="off">
-				<button id="location-search">Search</button>
-
+				<!-- HAVE THIS BE A MODAL -->
 				<div id="yelp-results"></div>
 
 				<h2>Add a friend</h2>
 				<ul id="friends-container">
 				</ul>
-				<button id="add-event">Submit</button>
+				<button id="add-event" class="button is-text">Submit</button>
 			</form>
-
-
-		</div>
+		</section>
 		
 		
 		<button id="sign-out">Sign Out</button>
