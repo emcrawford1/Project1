@@ -7,13 +7,11 @@
 //Global variables
 var proxyURL = "https://cors-anywhere.herokuapp.com/"
 
-
 //Global variables for the initial getYelpResults() ajax call
 var businessSearch = "/businesses/search?";
 var apiKey = "API_KEY=KrZjDTE7tobtXUeK3WkE6RuU8TeQHZ81YesOnKVOQn65dZV8rPjsA3ozCoi4qDDsx0N-gt9keUN2v8tX6hpJFAhmU_E07xpmKLQuqnB98mLdBjXn9VuhOzcX2gGMXHYx";
 var locationURL = "&location="
 var locationCity = "37209";
-
 
 //Ge8UQTXpurDcvqh9sKkQUg
 //KrZjDTE7tobtXUeK3WkE6RuU8TeQHZ81YesOnKVOQn65dZV8rPjsA3ozCoi4qDDsx0N-gt9keUN2v8tX6hpJFAhmU_E07xpmKLQuqnB98mLdBjXn9VuhOzcX2gGMXHYx
