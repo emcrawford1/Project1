@@ -119,7 +119,32 @@ function renderEventsListItem(item) {
     }
   })
 
-  var groupMembers = []
+  var userTagContainers = [];
+
+  // get others...
+  others.forEach(function(other){
+    database.ref('users/' + other.member).once('value', function(snap) {
+      var userTagContainer = $('<div>').addClass('control');
+      var userTags = $('<div>').addClass('tags has-addons');
+      var nameTag = $('<span>').addClass('tag is-dark').text(snap.val().userName);
+      var responseTag = $('<span>').addClass('tag').text(other.response);
+      if (other.response === 'pending') {
+        responseTag.addClass('is-warning');
+      }
+    
+      if (other.response === 'going') {
+        responseTag.addClass('is-success');
+      } 
+    
+      if (other.response === 'not going') {
+        responseTag.addClass('is-danger');
+      }
+      userTags.append(nameTag, responseTag);
+      userTagContainer.append(userTags);
+      userTagContainers.push(userTagContainer);
+    })
+  })
+
 
   function getDate(a) {
     //03/15/2019
@@ -183,7 +208,8 @@ function renderEventsListItem(item) {
   var locationAddress = $('<p>').addClass('subtitle is-7')
     .text(item.val().eventLocation.location.display_address[0] +  ', ' + item.val().eventLocation.location.display_address[1]);
   var description = $('<p>').text(item.val().eventDescription);
-  content.append(eventTitle, locationName, locationAddress, description);
+  var friendResponses = $('<div>').addClass('buttons').append(userTagContainers);
+  content.append(eventTitle, locationName, locationAddress, description, friendResponses);
   cardContent.append(content);
   
   var responseButtonContainer = $('<div>').addClass('level-item buttons');
