@@ -28,8 +28,7 @@ function getYelpResults(searchType, key, searchParam_1, searchParam_2) {
     $.ajax({
         url: queryURL,
         method: "GET",
-        //dataType: 'json',
-        'Origin': 'header is required',
+        //'Origin': 'header is required',
         // headers: {
         //     'Authorization': 'Bearer KrZjDTE7tobtXUeK3WkE6RuU8TeQHZ81YesOnKVOQn65dZV8rPjsA3ozCoi4qDDsx0N-gt9keUN2v8tX6hpJFAhmU_E07xpmKLQuqnB98mLdBjXn9VuhOzcX2gGMXHYx'
         // },
