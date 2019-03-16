@@ -178,9 +178,12 @@ function renderEventsListItem(item) {
 
   var cardContent = $('<div>').addClass('message-body');
   var content = $('<div>').addClass('content');
-  var eventTitle = $('<h2>').text(item.val().eventName);
-  var locationName = $('<h4>').text(item.val().eventLocation.name);
-  content.append(eventTitle, locationName);
+  var eventTitle = $('<h2>').addClass('title is-3').text(item.val().eventName);
+  var locationName = $('<h4>').addClass('title').text(item.val().eventLocation.name);
+  var locationAddress = $('<p>').addClass('subtitle is-7')
+    .text(item.val().eventLocation.location.display_address[0] +  ', ' + item.val().eventLocation.location.display_address[1]);
+  var description = $('<p>').text(item.val().eventDescription);
+  content.append(eventTitle, locationName, locationAddress, description);
   cardContent.append(content);
   
   var responseButtonContainer = $('<div>').addClass('level-item buttons');
@@ -195,7 +198,7 @@ function renderEventsListItem(item) {
     .addClass('button').text('Not Going');
 
   if (status === 'pending') {
-    var pendingTag = $('<span>').addClass('tag is-medium is-dark is-capitalized').text(status);
+    var pendingTag = $('<span>').addClass('tag is-medium is-warning is-capitalized').text('Please respond');
     cardHeader.append(pendingTag)
   }
 
@@ -289,6 +292,7 @@ $(document).on('click', '#add-event', function (e) {
   var eventTime = timeSelected;
   var friends = [];
   var eventLocation = yelpResponse.businesses[selectedYelpResponse];
+  var eventDescription = $('#event-description').val().trim();
 
   $('.friend.selected').each(function () {
     friends.push($(this).data('id'));
@@ -299,6 +303,8 @@ $(document).on('click', '#add-event', function (e) {
     eventOwner: currentUserProf,
     eventName: eventName,
     eventDate: eventDate,
+    eventTime: eventTime,
+    eventDescription: eventDescription,
     eventLocation: eventLocation
   }).then(function () {
     newEvent.child('eventMembers').push({

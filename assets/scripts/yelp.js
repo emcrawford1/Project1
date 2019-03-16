@@ -74,7 +74,7 @@ function postToDOM(apiResponse) {
 
         var restName = $('<h2>').addClass('title is-4').text(val.name);
         var restAddr = $('<p>').addClass('subtitle is-5')
-            .text(val.location.display_address);
+            .text(val.location.display_address[0] + ', ' + val.location.display_address[1]);
 
         var moreButton = $('<button>')
             .addClass('more-button')
