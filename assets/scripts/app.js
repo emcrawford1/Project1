@@ -19,7 +19,7 @@ firebase.initializeApp(config);
 var database = firebase.database();
 
 var uiConfig = {
-  signInSuccessUrl: '/',
+  signInSuccessUrl: '/Project1',
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
