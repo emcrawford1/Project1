@@ -63,7 +63,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 })
 
 function init() {
-  
+  // add user cards to event add area
   database.ref('users').on('child_added', function(snapshot) {
     if (snapshot.key !== currentUserProf) {
       var friendColumn = $('<div>').addClass('column');
@@ -85,29 +85,28 @@ function init() {
   });
   
   database.ref('events').on('child_changed', function(snapshot) {
-    snapshot.child('eventMembers').forEach(function(childSnaphot) {
-      if (childSnaphot.val().member === currentUserProf) {
-        renderEventsListItem(snapshot)
-      }
-    }) 
+    if(snapshot.val().eventMembers !== undefined) {
+      var obj = snapshot.val().eventMembers;
+      Object.keys(obj).forEach(function(key) {
+        if(obj[key].member === currentUserProf) {
+          renderEventsListItem(snapshot)
+        };
+      });
+    }
   });
     
   database.ref('events').on('child_added', function(snapshot) {
-    var obj = snapshot.val().eventMembers;
-    Object.keys(obj).forEach(function(key) {
-      if(obj[key].member === currentUserProf) {
-        renderEventsListItem(snapshot)
-      };
-    });
-    //console.log(snapshot.val().eventMembers);
-    
-    // snapshot.child('eventMembers').forEach(function(childSnaphot) {
-    //   console.log(childSnaphot.val())
-    //   if (childSnaphot.val().member === currentUserProf) {
-    //     renderEventsListItem(snapshot)
-    //   }
-    // }) 
+    console.log($('#' + snapshot.key).length)
+    if(snapshot.val().eventMembers !== undefined) {
+      var obj = snapshot.val().eventMembers;
+      Object.keys(obj).forEach(function(key) {
+        if(obj[key].member === currentUserProf) {
+          renderEventsListItem(snapshot)
+        };
+      });
+    }
   });
+  
 }
 
 function renderEventsListItem(item) {
@@ -121,8 +120,7 @@ function renderEventsListItem(item) {
     }
   })
 
-  console.log(others)
-
+  var groupMembers = []
 
   function getDate(a) {
     //03/15/2019
@@ -196,6 +194,7 @@ function renderEventsListItem(item) {
   footerRight.append(footerItem);
   footer.append(footerLeft, footerRight).css({ padding: "10px", borderTop: 'solid 1px rgba(0,0,0,0.1)'});
 
+
   card.append(cardHeader, cardContent, footer);
   cardColumn.append(card);
 
@@ -247,7 +246,7 @@ $(document).on('click', '#add-event', function(e) {
   }).then(function() {
     newEvent.child('eventMembers').push({ member: currentUserProf, response: 'going' })
     friends.forEach(function(friend) {
-      newEvent.child('eventMembers').push({ member: friend, response: 'none'})
+      newEvent.child('eventMembers').push({ member: friend, response: 'pending'})
     })
 
     $('#create-event').hide();
