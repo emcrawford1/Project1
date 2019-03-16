@@ -2,6 +2,9 @@ var currentUser = null;
 var userEmail = null;
 var userName = null;
 var currentUserProf = null;
+var currentLong = '';
+var currentLat = '';
+var currentAddress = '';
 
 var config = {
   apiKey: "AIzaSyAl_ivk9jeCwqIPtiD0bbTBPrgiSQDa0R4",
@@ -16,7 +19,7 @@ firebase.initializeApp(config);
 var database = firebase.database();
 
 var uiConfig = {
-  signInSuccessUrl: '/datacalls.html',
+  signInSuccessUrl: '/',
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
@@ -59,6 +62,7 @@ firebase.auth().onAuthStateChanged(function (user) {
     $('#login').show();
     $('#profile').hide();
     $('#sign-out').hide();
+    $('#create-event').hide();
   }
 })
 
@@ -126,8 +130,8 @@ function renderEventsListItem(item) {
     database.ref('users/' + other.member).once('value', function(snap) {
       var userTagContainer = $('<div>').addClass('control');
       var userTags = $('<div>').addClass('tags has-addons');
-      var nameTag = $('<span>').addClass('tag is-dark').text(snap.val().userName);
-      var responseTag = $('<span>').addClass('tag').text(other.response);
+      var nameTag = $('<span>').addClass('tag is-dark is-capitalized').text(snap.val().userName);
+      var responseTag = $('<span>').addClass('tag is-capitalized').text(other.response);
       if (other.response === 'pending') {
         responseTag.addClass('is-warning');
       }
@@ -201,14 +205,20 @@ function renderEventsListItem(item) {
   var cardTitle = $('<p>').text(date[0] + ' ' + date[1]);
   cardHeader.append(cardTitle);
 
+  var itemLoc = item.val().eventLocation;
+
   var cardContent = $('<div>').addClass('message-body');
   var content = $('<div>').addClass('content');
   var eventTitle = $('<h2>').addClass('title is-3').text(item.val().eventName);
-  var locationName = $('<h4>').addClass('title').text(item.val().eventLocation.name);
-  var locationAddress = $('<p>').addClass('subtitle is-7')
-    .text(item.val().eventLocation.location.display_address[0] +  ', ' + item.val().eventLocation.location.display_address[1]);
-  var description = $('<blockquote>').text(item.val().eventDescription);
-  var friendsGoing = $('<h5>').addClass('title is-6 is-marginless').text('Other Friends Going:');
+  var locationName = $('<h4>').addClass('title is-marginless').text(item.val().eventLocation.name);
+  var locationAddress = $('<a>')
+    .addClass('locationLink subtitle is-7')
+    .attr('data-lat', itemLoc.coordinates.latitude)
+    .attr('data-long', itemLoc.coordinates.longitude)
+    .attr('data-address', itemLoc.location.display_address[0] +  ', ' + itemLoc.location.display_address[1])
+    .text(itemLoc.location.display_address[0] +  ', ' + itemLoc.location.display_address[1]);
+  var description = $('<blockquote>').text(item.val().eventDescription).css('marginTop', '20px');
+  var friendsGoing = $('<h5>').addClass('title is-6 is-marginless').text("Friends' Status:");
   var friendResponses = $('<div>').css({paddingTop: '10px'}).addClass('buttons').append(userTagContainers);
   content.append(eventTitle, locationName, locationAddress, description, friendsGoing, friendResponses);
   cardContent.append(content);
@@ -307,6 +317,15 @@ $(document).on('click', '#sign-out', function (e) {
   firebase.auth().signOut();
 })
 
+$(document).on('click', '.locationLink', function(e) {
+  e.preventDefault();
+  currentLat = $(this).data('lat');
+  currentLong = $(this).data('long');
+  currentAddress = $(this).data('address')
+  initMap();
+  $('#map-modal').addClass('is-active')
+})
+
 var dateSelected = '';
 var timeSelected = '';
 
@@ -344,6 +363,20 @@ $(document).on('click', '#add-event', function (e) {
         response: 'pending'
       })
     })
+
+    $('#event-name').val('');
+    $('#event-description').val('')
+    $('.friend')
+      .removeClass('selected')
+      .removeClass('has-background-primary')
+      .removeClass('has-text-white');
+
+    $('#chosen-place').hide();
+    $('#chose-place').find('title').empty();
+
+    $('#event-location').val('');
+    $('#eventPlace').show();
+  
 
     $('#create-event').hide();
     $('#profile').show();
