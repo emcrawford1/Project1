@@ -128,7 +128,7 @@ function renderEventsListItem(item) {
   // get others...
   others.forEach(function(other){
     database.ref('users/' + other.member).once('value', function(snap) {
-      var userTagContainer = $('<div>').addClass('control');
+      var userTagContainer = $('<div>').addClass('control').css({'margin': '0 10px 10px 0'});
       var userTags = $('<div>').addClass('tags has-addons');
       var nameTag = $('<span>').addClass('tag is-dark is-capitalized').text(snap.val().userName);
       var responseTag = $('<span>').addClass('tag is-capitalized').text(other.response);
