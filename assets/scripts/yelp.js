@@ -22,19 +22,19 @@ var yelpResponse;
 var selectedYelpResponse;
 
 function getYelpResults(searchType, key, searchParam_1, searchParam_2) {
-    var queryURL = "https://api.yelp.com/v3" + searchType + key + searchParam_1 + searchParam_2;
+    var queryURL = "https://api.yelp.com/v3" + searchType + searchParam_1 + searchParam_2;
     console.log(queryURL)
 
     $.ajax({
         url: queryURL,
         method: "GET",
         //'Origin': 'header is required',
-        // headers: {
-        //     'Authorization': 'Bearer KrZjDTE7tobtXUeK3WkE6RuU8TeQHZ81YesOnKVOQn65dZV8rPjsA3ozCoi4qDDsx0N-gt9keUN2v8tX6hpJFAhmU_E07xpmKLQuqnB98mLdBjXn9VuhOzcX2gGMXHYx'
-        // },
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader('Authorization', 'Bearer Wbd3Qxfuar4Wk1wnoGMDo_AsJxhGellrgcHSeY35MIwTzIZHwdgKBZpXlTV3h5p1ekCbRtyhcS5iAVYp2EYcMjqaAXjJL9_yGKeB3C6pmsLQ7JZ8_lJ0Z4nAwxiNXHYx')
-        }
+        headers: {
+            'Authorization': 'Bearer KrZjDTE7tobtXUeK3WkE6RuU8TeQHZ81YesOnKVOQn65dZV8rPjsA3ozCoi4qDDsx0N-gt9keUN2v8tX6hpJFAhmU_E07xpmKLQuqnB98mLdBjXn9VuhOzcX2gGMXHYx'
+        },
+        // beforeSend: function (xhr) {
+        //     xhr.setRequestHeader('Authorization', 'Bearer Wbd3Qxfuar4Wk1wnoGMDo_AsJxhGellrgcHSeY35MIwTzIZHwdgKBZpXlTV3h5p1ekCbRtyhcS5iAVYp2EYcMjqaAXjJL9_yGKeB3C6pmsLQ7JZ8_lJ0Z4nAwxiNXHYx')
+        // }
     }).then(function (response) {
         yelpResponse = response;
         postToDOM(yelpResponse);
