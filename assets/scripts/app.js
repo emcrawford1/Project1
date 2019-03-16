@@ -26,25 +26,25 @@ var uiConfig = {
 var ui = new firebaseui.auth.AuthUI(firebase.auth());
 ui.start('#firebaseui-auth-container', uiConfig);
 
-firebase.auth().onAuthStateChanged(function(user) {
+firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
     userName = user.displayName;
     userEmail = user.email;
     currentUser = user.uid;
-    
+
     $('#login').hide();
     $('#profile-name').text('Hello, ' + userName + '!');
     $('#profile').show();
-    
+
     var userExists = false
-    database.ref('users').once('value', function(snapshot) {
-      snapshot.forEach(function(childSnaphot) {
+    database.ref('users').once('value', function (snapshot) {
+      snapshot.forEach(function (childSnaphot) {
         if (childSnaphot.val().userID === currentUser) {
           currentUserProf = childSnaphot.key;
           userExists = true;
         }
       })
-    }).then(function() {
+    }).then(function () {
       if (!userExists) {
         database.ref('users').push({
           userID: currentUser,
@@ -52,7 +52,7 @@ firebase.auth().onAuthStateChanged(function(user) {
           userEmail: userEmail
         })
       }
-    }).then(function() {
+    }).then(function () {
       init();
     })
   } else {
@@ -64,13 +64,13 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 function init() {
   // add user cards to event add area
-  database.ref('users').on('child_added', function(snapshot) {
+  database.ref('users').on('child_added', function (snapshot) {
     if (snapshot.key !== currentUserProf) {
       var friendColumn = $('<div>').addClass('column');
       var friend = $('<div>')
-      .addClass('card')
-      .addClass('friend')
-      .attr('data-id', snapshot.key);
+        .addClass('card')
+        .addClass('friend')
+        .attr('data-id', snapshot.key);
       var friendContent = $('<div>').addClass('card-content');
       var friendName = $('<p>').addClass('has-text-weight-bold').text(snapshot.val().userName);
       friendContent.append(friendName);
@@ -79,40 +79,39 @@ function init() {
       $('#friends-container').append(friendColumn);
     }
   })
-    
-  database.ref('events').on('child_removed', function(oldChildSnapshot) {
+
+  database.ref('events').on('child_removed', function (oldChildSnapshot) {
     $('#' + oldChildSnapshot.key).remove();
   });
-  
-  database.ref('events').on('child_changed', function(snapshot) {
-    if(snapshot.val().eventMembers !== undefined) {
+
+  database.ref('events').on('child_changed', function (snapshot) {
+    if (snapshot.val().eventMembers !== undefined) {
       var obj = snapshot.val().eventMembers;
-      Object.keys(obj).forEach(function(key) {
-        if(obj[key].member === currentUserProf) {
+      Object.keys(obj).forEach(function (key) {
+        if (obj[key].member === currentUserProf) {
           renderEventsListItem(snapshot)
         };
       });
     }
   });
-    
-  database.ref('events').on('child_added', function(snapshot) {
-    console.log($('#' + snapshot.key).length)
-    if(snapshot.val().eventMembers !== undefined) {
+
+  database.ref('events').on('child_added', function (snapshot) {
+    if (snapshot.val().eventMembers !== undefined) {
       var obj = snapshot.val().eventMembers;
-      Object.keys(obj).forEach(function(key) {
-        if(obj[key].member === currentUserProf) {
+      Object.keys(obj).forEach(function (key) {
+        if (obj[key].member === currentUserProf) {
           renderEventsListItem(snapshot)
         };
       });
     }
   });
-  
+
 }
 
 function renderEventsListItem(item) {
   var status = '';
   var others = [];
-  item.child('eventMembers').forEach(function(snapshot) {
+  item.child('eventMembers').forEach(function (snapshot) {
     if (snapshot.val().member === currentUserProf) {
       status = snapshot.val().response;
     } else {
@@ -126,7 +125,7 @@ function renderEventsListItem(item) {
     //03/15/2019
     var dateArray = a.split('/');
     var month = ''
-    switch(dateArray[0]) {
+    switch (dateArray[0]) {
       case '01':
         month = 'January'
         break;
@@ -167,13 +166,12 @@ function renderEventsListItem(item) {
     return [month, dateArray[1]]
   }
 
-  var cardColumn = $('<div>').addClass('column').addClass('is-half');
+  var cardColumn = $('<div>').attr('id', item.key).addClass('column').addClass('is-half');
 
   var card = $('<div>').addClass('message').addClass('eventsListItem');
-  card.attr('id', item.key);
 
   var date = getDate(item.val().eventDate);
-  
+
   var cardHeader = $('<header>').addClass('message-header');
   var cardTitle = $('<p>').text(date[0] + ' ' + date[1]);
   cardHeader.append(cardTitle);
@@ -184,37 +182,96 @@ function renderEventsListItem(item) {
   var locationName = $('<h4>').text(item.val().eventLocation.name);
   content.append(eventTitle, locationName);
   cardContent.append(content);
+  
+  var responseButtonContainer = $('<div>').addClass('level-item buttons');
+  var responseGoing = $('<button>')
+    .attr('data-id', item.key)
+    .addClass('going')
+    .addClass('button')
+    .text('Going');
+  var responseNotGoing = $('<button>')
+    .attr('data-id', item.key)
+    .addClass('not-going')
+    .addClass('button').text('Not Going');
 
-  var goingTag = $('<span>').addClass('tag is-medium is-dark is-capitalized').text(status);
+  if (status === 'pending') {
+    var pendingTag = $('<span>').addClass('tag is-medium is-dark is-capitalized').text(status);
+    cardHeader.append(pendingTag)
+  }
+
+  if (status === 'going') {
+    responseGoing.addClass('is-success');
+  } 
+
+  if (status === 'not going') {
+    responseNotGoing.addClass('is-danger');
+  }
+
+  responseButtonContainer.append(responseGoing, responseNotGoing);
+
   var footer = $('<div>').addClass('level');
   var footerLeft = $('<div>').addClass('level-left');
   var footerRight = $('<div>').addClass('level-right');
-  var footerItem = $('<div>').addClass('footer-item');
-  footerItem.append(goingTag);
+  var footerItem = $('<div>').addClass('level-item');
+  footerItem.append(responseButtonContainer);
   footerRight.append(footerItem);
-  footer.append(footerLeft, footerRight).css({ padding: "10px", borderTop: 'solid 1px rgba(0,0,0,0.1)'});
-
+  footer.append(footerLeft, footerRight).css({
+    padding: "10px",
+    borderTop: 'solid 1px rgba(0,0,0,0.1)'
+  });
 
   card.append(cardHeader, cardContent, footer);
   cardColumn.append(card);
 
   if (!$('#' + item.key).length) {
     $('#user-events').append(cardColumn);
+  } else {
+    $('#' + item.key).empty().append(card);
   }
 }
 
-$(document).on('click', '.friend', function() {
+$(document).on('click', '.going', function(e) {
+  e.preventDefault();
+  var dataID = $(this).data('id')
+  database.ref('events/' + dataID + '/eventMembers').once('value', function(snapshot) {
+    var obj = snapshot.val();
+    Object.keys(obj).forEach(function (myKey) {
+      if (obj[myKey].member === currentUserProf) {
+        database.ref('events/' + dataID + '/eventMembers/' + myKey).update({
+          response: 'going'
+        })
+      };
+    });
+  })
+})
+
+$(document).on('click', '.not-going', function(e) {
+  e.preventDefault();
+  var dataID = $(this).data('id')
+  database.ref('events/' + dataID + '/eventMembers').once('value', function(snapshot) {
+    var obj = snapshot.val();
+    Object.keys(obj).forEach(function (myKey) {
+      if (obj[myKey].member === currentUserProf) {
+        database.ref('events/' + dataID + '/eventMembers/' + myKey).update({
+          response: 'not going'
+        })
+      };
+    });
+  })
+})
+
+$(document).on('click', '.friend', function () {
   $(this).toggleClass('selected');
   $(this).toggleClass('has-background-primary	has-text-white')
 })
 
-$(document).on('click', '#start-event', function(e) {
+$(document).on('click', '#start-event', function (e) {
   e.preventDefault()
   $('#profile').hide();
   $('#create-event').show();
 })
 
-$(document).on('click', '#sign-out', function(e) {
+$(document).on('click', '#sign-out', function (e) {
   console.log('click')
   e.preventDefault();
   firebase.auth().signOut();
@@ -224,7 +281,7 @@ var dateSelected = '';
 var timeSelected = '';
 
 // create an event & add it to a user...
-$(document).on('click', '#add-event', function(e) {
+$(document).on('click', '#add-event', function (e) {
   e.preventDefault();
 
   var eventName = $('#event-name').val().trim();
@@ -232,8 +289,8 @@ $(document).on('click', '#add-event', function(e) {
   var eventTime = timeSelected;
   var friends = [];
   var eventLocation = yelpResponse.businesses[selectedYelpResponse];
-  
-  $('.friend.selected').each(function() {
+
+  $('.friend.selected').each(function () {
     friends.push($(this).data('id'));
   });
 
@@ -243,10 +300,16 @@ $(document).on('click', '#add-event', function(e) {
     eventName: eventName,
     eventDate: eventDate,
     eventLocation: eventLocation
-  }).then(function() {
-    newEvent.child('eventMembers').push({ member: currentUserProf, response: 'going' })
-    friends.forEach(function(friend) {
-      newEvent.child('eventMembers').push({ member: friend, response: 'pending'})
+  }).then(function () {
+    newEvent.child('eventMembers').push({
+      member: currentUserProf,
+      response: 'going'
+    })
+    friends.forEach(function (friend) {
+      newEvent.child('eventMembers').push({
+        member: friend,
+        response: 'pending'
+      })
     })
 
     $('#create-event').hide();
@@ -258,7 +321,6 @@ $(document).on('click', '#add-event', function(e) {
 
 
 
-$(document).on('click', 'button', function(e) {
+$(document).on('click', 'button', function (e) {
   e.preventDefault();
 })
-    
