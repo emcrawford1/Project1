@@ -193,7 +193,7 @@ function renderEventsListItem(item) {
 
   var cardColumn = $('<div>').attr('id', item.key).addClass('column').addClass('is-half');
 
-  var card = $('<div>').addClass('message').addClass('eventsListItem');
+  var card = $('<div>').addClass('message is-dark').addClass('eventsListItem');
 
   var date = getDate(item.val().eventDate);
 
@@ -207,9 +207,10 @@ function renderEventsListItem(item) {
   var locationName = $('<h4>').addClass('title').text(item.val().eventLocation.name);
   var locationAddress = $('<p>').addClass('subtitle is-7')
     .text(item.val().eventLocation.location.display_address[0] +  ', ' + item.val().eventLocation.location.display_address[1]);
-  var description = $('<p>').text(item.val().eventDescription);
-  var friendResponses = $('<div>').addClass('buttons').append(userTagContainers);
-  content.append(eventTitle, locationName, locationAddress, description, friendResponses);
+  var description = $('<blockquote>').text(item.val().eventDescription);
+  var friendsGoing = $('<h5>').addClass('title is-6 is-marginless').text('Other Friends Going:');
+  var friendResponses = $('<div>').css({paddingTop: '10px'}).addClass('buttons').append(userTagContainers);
+  content.append(eventTitle, locationName, locationAddress, description, friendsGoing, friendResponses);
   cardContent.append(content);
   
   var responseButtonContainer = $('<div>').addClass('level-item buttons');
