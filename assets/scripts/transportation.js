@@ -1,120 +1,41 @@
 
 
+function initMap() {
 
-   $("#map").css({"height":"500px", "width":"500px"});
+  var directionsService = new google.maps.DirectionsService;
+  var directionsDisplay = new google.maps.DirectionsRenderer;
 
-   function initMap() {
-    var map = new google.maps.Map(document.getElementById('map'), {
-      mapTypeControl: false,
-      center: {lat:36.1626638, lng:-86.7816016},
-      zoom: 13
-    });
-  
-    new AutocompleteDirectionsHandler(map);
-  }
-  
-  /**
-   * @constructor
-   */
-  function AutocompleteDirectionsHandler(map) {
-    this.map = map;
-    this.originPlaceId = null;
-    this.destinationPlaceId = null;
-    this.travelMode = 'DRIVING';
-    this.directionsService = new google.maps.DirectionsService;
-    this.directionsDisplay = new google.maps.DirectionsRenderer;
-    this.directionsDisplay.setMap(map);
-  
-    var originInput = document.getElementById('origin-input');
-    var destinationInput = document.getElementById('destination-input');
-    var modeSelector = document.getElementById('mode-selector');
-  
-    var originAutocomplete = new google.maps.places.Autocomplete(originInput);
-    // Specify just the place data fields that you need.
-    originAutocomplete.setFields(['place_id']);
-  
-    var destinationAutocomplete =
-        new google.maps.places.Autocomplete(destinationInput);
-    // Specify just the place data fields that you need.
-    destinationAutocomplete.setFields(['place_id']);
-  
-    
-    this.setupClickListener('changemode-driving', 'DRIVING');
-  
-    this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
-    this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
-  
-    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
-    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(
-        destinationInput);
-    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
-  }
-  
-  // Sets a listener on a radio button to change the filter type on Places
-  // Autocomplete.
-  AutocompleteDirectionsHandler.prototype.setupClickListener = function(
-      id, mode) {
-    var radioButton = document.getElementById(id);
-    var me = this;
-  
-    radioButton.addEventListener('click', function() {
-      me.travelMode = mode;
-      me.route();
-    });
-  };
-  
-  AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(
-      autocomplete, mode) {
-    var me = this;
-    autocomplete.bindTo('bounds', this.map);
-  
-    autocomplete.addListener('place_changed', function() {
-      var place = autocomplete.getPlace();
-  
-      if (!place.place_id) {
-        window.alert('Please select an option from the dropdown list.');
-        return;
-      }
-      if (mode === 'ORIG') {
-        me.originPlaceId = place.place_id;
+  var myLatLng = {lat: currentLat, lng: currentLong}; // get this from clicked event...
+
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 13,
+    center: myLatLng
+  });
+
+  directionsDisplay.setMap(map);
+
+  $('#start-enter').on('click', function(e) {
+    e.preventDefault();
+    calculateAndDisplayRoute(directionsService, directionsDisplay);
+  })
+
+  function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+    directionsService.route({
+      origin: document.getElementById('start-input').value,
+      destination: currentAddress, 
+      travelMode: 'DRIVING'
+    }, function(response, status) {
+      if (status === 'OK') {
+        directionsDisplay.setDirections(response);
       } else {
-        me.destinationPlaceId = place.place_id;
+        window.alert('Directions request failed due to ' + status);
       }
-      me.route();
     });
-  };
-  
-  AutocompleteDirectionsHandler.prototype.route = function() {
-    if (!this.originPlaceId || !this.destinationPlaceId) {
-      return;
-    }
-    var me = this;
-  
-    this.directionsService.route(
-        {
-          origin: {'placeId': this.originPlaceId},
-          destination: {'placeId': this.destinationPlaceId},
-          travelMode: this.travelMode
-        },
-        function(response, status) {
-          if (status === 'OK') {
-            me.directionsDisplay.setDirections(response);
-          } else {
-            window.alert('Directions request failed due to ' + status);
-          }
-        });
-  };
+  }
 
-
-  
-
-  
-
-  
-
-    
-  
-
-  
- 
-  
+  var marker = new google.maps.Marker({
+    position: myLatLng,
+    map: map,
+    title: 'Hello World!'
+  });
+}

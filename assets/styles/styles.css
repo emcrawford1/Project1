@@ -1,41 +1,68 @@
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  height: 100%;
+  background: black;
+  overflow: auto;
+}
+
+.navbarContent {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  justify-content: space-between;
+  width: calc(100%);
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+}
+
+.logoContainer img {
+  max-height: 40px;
+  margin-right: 6px;
+}
+
 .detailsButton.selected {
   color: red;
 }
 
 .businessListing {
-  display: flex;
-  flex-direction: row;
-  max-width: 960px;
-  margin-bottom: 10px;
+  padding: 20px 0;
+}
+
+.eventsListItem {
   border: solid 1px gray;
-  align-items: stretch;
 }
 
-.ratingPriceContainer {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  align-items: stretch;
-  justify-content: stretch;
-  border: solid 1px black;
+.message {
+  min-height: 100%;
 }
 
-.restDeets {
-  flex: 5;
+.businessListing:nth-of-type(even) {
+  background: rgba(0,0,0,0.05);
+}
+.listings-container {
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
-.indicator {
-  flex: 1;
+.moreDeets {
+  padding: 20px;
+  display: none;
 }
 
-.rating {
-  display: block;
-  font-size: 1.4em;
-  flex: 2;
-  background: blue;
+.label {
+  margin-top: 20px;
 }
 
-.date {
-  padding: 0.75em;
+.container {
+  background: white;
+  padding: 20px;
+  border-radius: 4px;
 }
