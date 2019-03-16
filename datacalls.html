@@ -59,7 +59,7 @@
 					</div>
 				</div>
 				<h2 class="title is-4 has-text-grey">Your upcoming plans</h2>
-				<div id="user-events" class="columns"></div>
+				<div id="user-events" class="columns is-multiline"></div>
 			</div>
 		</section>
 
@@ -95,30 +95,33 @@
 						</div>
 					</div>
 
-					<div class="field">
+					<div id="eventPlace" class="field">
 						<label class="label">Choose a place</label>
-						<div class="control">
+						<div class="control" style="padding-bottom: 10px">
 							<input id="event-location" class="input is-large" placeholder="Add a city and state, or zip" autocomplete="off">
 						</div>
+						<button id="location-search" class="button is-link">Search location</button>
 					</div>
-					<button id="location-search" class="button is-link">Search location</button>
+					
 
+					<div id="chosen-place" class="field" style="display:none">
+						<h2 class="title is-3"></h2>
+						<button id="change-place" class="button is-small">Change Location</button>
+					</div>
 
-					<!-- HAVE THIS BE A MODAL -->
 					<div id="yelp-results" class="modal">
 						<div class="modal-background">
 							<div class="modal-content" style="max-height: 100vh">
-								<div class="listings-container" style="margin-top: 80px">
-
-								</div>
+								<div class="listings-container" style="margin-top: 80px"></div>
 							</div>
 						</div>
 						<button class="modal-close is-large" aria-label="close"></button>
 					</div>
 
-					<h3 class="title is-3">Add friends</h3>
+					<label class="label">Add friends</label>
 					<div id="friends-container" class="columns">
 					</div>
+
 					<div class="field is-grouped">
 						<p class="control">
 							<button id="add-event" class="button is-link">Submit</button>

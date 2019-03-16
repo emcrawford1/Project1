@@ -20,6 +20,7 @@ var locationCity = "37209";
 
 
 var yelpResponse;
+var selectedYelpResponse;
 
 function getYelpResults(searchType, key, searchParam_1, searchParam_2) {
     var queryURL = "https://api.yelp.com/v3" + searchType + key + searchParam_1 + searchParam_2;
@@ -105,7 +106,6 @@ function postToDOM(apiResponse) {
 
     })
 
-
 }
 
 
@@ -122,18 +122,30 @@ $(document).on('click', '.modal-close', function (e) {
     $('.modal').removeClass('is-active');
 })
 
-// $(document).on('click', '.modal-background', function() {
-//     $('.modal').removeClass('is-active');
-//     console.log('clicked?')
-// })
+$(document).on('click', '.modal-background', function() {
+    $('.modal').removeClass('is-active');
+})
 
 $(document).on('click', '.businessListing', function () {
     $('.businessListing').removeClass('selected');
     $(this).toggleClass('selected');
 })
 
+$(document).on('click', '.modal-content', function(evt) {
+   evt.stopPropagation();
+})
+
 $(document).on('click', '.more-button', function (e) {
     e.preventDefault();
     var showMore = $(this).parent().parent().parent().parent().find('.moreDeets');
     showMore.toggle();
+})
+
+$(document).on('click', '.select-button', function (e) {
+    e.preventDefault();
+    selectedYelpResponse = $(this).parent().parent().parent().parent().attr('id');
+    $('#eventPlace').hide();
+    $('#chosen-place').find('h2').text(yelpResponse.businesses[selectedYelpResponse].name);
+    $('#chosen-place').show();
+    $('.modal').removeClass('is-active');
 })

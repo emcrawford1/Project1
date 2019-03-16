@@ -93,28 +93,42 @@ function init() {
   });
     
   database.ref('events').on('child_added', function(snapshot) {
-    snapshot.child('eventMembers').forEach(function(childSnaphot) {
-      if (childSnaphot.val().member === currentUserProf) {
+    var obj = snapshot.val().eventMembers;
+    Object.keys(obj).forEach(function(key) {
+      if(obj[key].member === currentUserProf) {
         renderEventsListItem(snapshot)
-      }
-    }) 
+      };
+    });
+    //console.log(snapshot.val().eventMembers);
+    
+    // snapshot.child('eventMembers').forEach(function(childSnaphot) {
+    //   console.log(childSnaphot.val())
+    //   if (childSnaphot.val().member === currentUserProf) {
+    //     renderEventsListItem(snapshot)
+    //   }
+    // }) 
   });
 }
 
 function renderEventsListItem(item) {
   var status = '';
+  var others = [];
   item.child('eventMembers').forEach(function(snapshot) {
     if (snapshot.val().member === currentUserProf) {
       status = snapshot.val().response;
+    } else {
+      others.push(snapshot.val())
     }
   })
 
-  console.log(item.val())
+  console.log(others)
+
 
   function getDate(a) {
-    var dateArray = a.split('-');
+    //03/15/2019
+    var dateArray = a.split('/');
     var month = ''
-    switch(dateArray[1]) {
+    switch(dateArray[0]) {
       case '01':
         month = 'January'
         break;
@@ -152,7 +166,7 @@ function renderEventsListItem(item) {
         month = 'December'
         break;
     }
-    return [month, dateArray[2]]
+    return [month, dateArray[1]]
   }
 
   var cardColumn = $('<div>').addClass('column').addClass('is-half');
@@ -191,7 +205,6 @@ function renderEventsListItem(item) {
 }
 
 $(document).on('click', '.friend', function() {
-  //<i class="fas fa-check-circle"></i>
   $(this).toggleClass('selected');
   $(this).toggleClass('has-background-primary	has-text-white')
 })
@@ -219,31 +232,28 @@ $(document).on('click', '#add-event', function(e) {
   var eventDate = dateSelected;
   var eventTime = timeSelected;
   var friends = [];
-  var eventID = $('#yelp-results').find('.selected').attr('id');
-  var eventLocation = yelpResponse.businesses[eventID];
+  var eventLocation = yelpResponse.businesses[selectedYelpResponse];
   
-  $('friend.selected').each(function() {
+  $('.friend.selected').each(function() {
     friends.push($(this).data('id'));
   });
 
-  console.log(eventName, eventDate, eventTime, friends, eventID, eventLocation)
+  var newEvent = database.ref('/events').push();
+  newEvent.set({
+    eventOwner: currentUserProf,
+    eventName: eventName,
+    eventDate: eventDate,
+    eventLocation: eventLocation
+  }).then(function() {
+    newEvent.child('eventMembers').push({ member: currentUserProf, response: 'going' })
+    friends.forEach(function(friend) {
+      newEvent.child('eventMembers').push({ member: friend, response: 'none'})
+    })
 
-  // var newEvent = database.ref('/events').push();
-  // newEvent.set({
-  //   eventOwner: currentUserProf,
-  //   eventName: eventName,
-  //   eventDate: eventDate,
-  //   eventLocation: eventLocation
-  // }).then(function() {
-  //   newEvent.child('eventMembers').push({ member: currentUserProf, response: 'going' })
-  //   friends.forEach(function(friend) {
-  //     newEvent.child('eventMembers').push({ member: friend, response: 'none'})
-  //   })
+    $('#create-event').hide();
+    $('#profile').show();
 
-  //   $('#create-event').hide();
-  //   $('#profile').show();
-
-  // })
+  })
 })
 
 

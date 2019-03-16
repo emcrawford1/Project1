@@ -30,6 +30,10 @@ body {
   display: none;
 }
 
+.label {
+  margin-top: 20px;
+}
+
 /* .businessListing {
   display: flex;
   flex-direction: row;
