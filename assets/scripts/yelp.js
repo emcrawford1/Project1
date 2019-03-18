@@ -26,11 +26,8 @@ function getYelpResults(searchType, key, searchParam_1, searchParam_2) {
     console.log(queryURL)
 
     $.ajax({
-        url: queryURL,
+        url: proxyURL + queryURL,
         method: "GET",
-        // headers: {
-        //     'Authorization': 'Bearer Wbd3Qxfuar4Wk1wnoGMDo_AsJxhGellrgcHSeY35MIwTzIZHwdgKBZpXlTV3h5p1ekCbRtyhcS5iAVYp2EYcMjqaAXjJL9_yGKeB3C6pmsLQ7JZ8_lJ0Z4nAwxiNXHYx'
-        // },
         beforeSend: function (xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer Wbd3Qxfuar4Wk1wnoGMDo_AsJxhGellrgcHSeY35MIwTzIZHwdgKBZpXlTV3h5p1ekCbRtyhcS5iAVYp2EYcMjqaAXjJL9_yGKeB3C6pmsLQ7JZ8_lJ0Z4nAwxiNXHYx')
         }
