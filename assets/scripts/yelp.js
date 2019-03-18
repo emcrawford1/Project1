@@ -72,13 +72,14 @@ function postToDOM(apiResponse) {
             .append(rating, restPrice);
 
         var restName = $('<h2>').addClass('title is-4').text(val.name);
-        var restAddr = $('<p>').addClass('subtitle is-5')
+        var categories = val.categories.map(function(cat) { return cat.title })
+        var categoryText = (categories.length > 1) ? categories.join(', ') : categories[0];
+        var restType = $('<p>').addClass('subtitle is-6 has-text-grey')
+            .css({ marginBottom: '.2em'})
+            .text(categoryText)
+        var restAddr = $('<p>').addClass('is-size-5 is-marginless')
             .text(val.location.display_address[0] + ', ' + val.location.display_address[1]);
 
-        var moreButton = $('<button>')
-            .addClass('more-button')
-            .addClass('button')
-            .text('More');
         var selectButton = $('<button>')
             .addClass('button is-link')
             .addClass('select-button')
@@ -86,20 +87,17 @@ function postToDOM(apiResponse) {
 
         var buttonContainer = $('<p>')
             .addClass('has-text-right buttons are-medium is-right')
-            .append(moreButton, selectButton)
+            .append(selectButton)
             .css({
                 paddingRight: '10px'
             })
 
         var restDeets = $('<div>').addClass('column is-four-fifths');
-        restDeets.append(restName, restAddr, buttonContainer);
-
+        restDeets.append(restName, restType, restAddr, buttonContainer);
 
         container.append(ratingPriceContainer, restDeets);
 
-        var moreDeets = $('<div>').addClass('moreDeets')
-
-        business.append(container, moreDeets);
+        business.append(container);
 
         $('.listings-container').append(business);
 

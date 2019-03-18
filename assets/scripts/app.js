@@ -211,6 +211,9 @@ function renderEventsListItem(item) {
   var content = $('<div>').addClass('content');
   var eventTitle = $('<h2>').addClass('title is-3').text(item.val().eventName);
   var locationName = $('<h4>').addClass('title is-marginless').text(item.val().eventLocation.name);
+  var categories = item.val().eventLocation.categories.map(function(cat) { return cat.title })
+  var categoryText = (categories.length > 1) ? categories.join(', ') : categories[0];
+  var categoryP = $('<p>').text(categoryText);
   var locationAddress = $('<a>')
     .addClass('locationLink subtitle is-7')
     .attr('data-lat', itemLoc.coordinates.latitude)
@@ -220,7 +223,7 @@ function renderEventsListItem(item) {
   var description = $('<blockquote>').text(item.val().eventDescription).css('marginTop', '20px');
   var friendsGoing = $('<h5>').addClass('title is-6 is-marginless').text("Friends' Status:");
   var friendResponses = $('<div>').css({paddingTop: '10px'}).addClass('buttons').append(userTagContainers);
-  content.append(eventTitle, locationName, locationAddress, description, friendsGoing, friendResponses);
+  content.append(eventTitle, locationName, categoryP, locationAddress, description, friendsGoing, friendResponses);
   cardContent.append(content);
   
   var responseButtonContainer = $('<div>').addClass('level-item buttons');
@@ -385,8 +388,37 @@ $(document).on('click', '#add-event', function (e) {
 })
 
 
+$(document).on('click', '#cancel-event', function (e) {
+  e.preventDefault();
+  $('#event-name').val('');
+  $('#event-description').val('')
+  $('.friend')
+    .removeClass('selected')
+    .removeClass('has-background-primary')
+    .removeClass('has-text-white');
+
+  $('#chosen-place').hide();
+  $('#chose-place').find('title').empty();
+
+  $('#event-location').val('');
+  $('#eventPlace').show();
+
+
+  $('#create-event').hide();
+  $('#profile').show();
+});
+
 
 
 $(document).on('click', 'button', function (e) {
   e.preventDefault();
 })
+
+$(document).ready(function() {
+  $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+});
